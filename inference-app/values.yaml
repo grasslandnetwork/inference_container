@@ -57,6 +57,7 @@ ingress:
     - host: inference-app
       paths:
       - path: /
+          pathType: ImplementationSpecific
         backend:
           serviceName: inference-app
           servicePort: 80
