@@ -90,6 +90,11 @@ autoscaling:
 
 nodeSelector: {}
 
-tolerations: []
+#tolerations: []
+# Added toleration for gpu workers
+tolerations:
+- key: "nvidia.com/gpu"
+  operator: "Exists"
+  effect: "NoSchedule"
 
 affinity: {}
