@@ -30,6 +30,12 @@ def load_classes(path):
     return list(filter(None, names))  # filter removes empty strings (such as last line)
 
 def detect(save_img=False):
+
+    # empty garbage and clear cache to solve "CUDA out of memory" Error (See https://www.kaggle.com/getting-started/140636)
+    import gc
+    gc.collect()
+    torch.cuda.empty_cache()
+    
     out, source, weights, view_img, save_txt, imgsz, cfg, names, show_inference_speed = \
         opt.output, opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, opt.cfg, opt.names, opt.show_inference_speed
     webcam = source == '0' or source.startswith('rtsp') or source.startswith('http') or source.endswith('.txt') or source.startswith('tcp')
