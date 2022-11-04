@@ -32,7 +32,7 @@ def load_classes(path):
 def detect(save_img=False):
     out, source, weights, view_img, save_txt, imgsz, cfg, names, show_inference_speed = \
         opt.output, opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, opt.cfg, opt.names, opt.show_inference_speed
-    webcam = source == '0' or source.startswith('rtsp') or source.startswith('http') or source.endswith('.txt')
+    webcam = source == '0' or source.startswith('rtsp') or source.startswith('http') or source.endswith('.txt') or source.startswith('tcp')
 
     # Initialize
     device = select_device(opt.device)
