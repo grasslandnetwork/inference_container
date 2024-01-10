@@ -15,7 +15,7 @@ wget https://downloads.grassland.network/models/p6.pt
 
 ```
 cd ..
-docker build -t grassland_substrate_inference_container:0.1 .
+docker build -t grasslandnetwork/inference_container:0.3 .
 ```
 
 ## Running the container
@@ -26,12 +26,12 @@ Place the detection models inside the "app" directory
 Ensure that the Substrate version of the Grassland full node is running first. This inference container assumes that the node is listening for incoming WebSocket traffic on 127.0.0.1:9944
 
 ```
-docker run -t --gpus all --rm --network=host grassland_substrate_inference_container:0.1
+docker run -t --gpus all --rm --network=host grasslandnetwork/inference_container:0.3
 ```
 
 If you're using a webcam, add "--device=/dev/video0" to ensure that the container can access the webcam 
 ```
-docker run -t --gpus all --rm --device=/dev/video0 --network=host grassland_substrate_inference_container:0.1
+docker run -t --gpus all --rm --device=/dev/video0 --network=host grasslandnetwork/inference_container:0.3
 ```
 
 ## Default URL's
