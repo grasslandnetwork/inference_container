@@ -1,3 +1,0 @@
-[submodule "nano_depth"]
-	path = nano_depth
-	url = https://github.com/dusty-nv/jetson-inference
