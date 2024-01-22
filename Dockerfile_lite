@@ -1,0 +1,33 @@
+# Use NVIDIA L4T CUDA base image
+FROM nvcr.io/nvidia/l4t-cuda:10.2.460-runtime
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and setuptools
+RUN python3 -m pip install --upgrade pip setuptools
+
+# Install TensorFlow
+# Note: Adjust the TensorFlow version as necessary to ensure compatibility with the CUDA version.
+RUN pip3 install tensorflow==2.3.0
+
+# Your application's setup
+WORKDIR /app
+
+# Optional: If you have additional dependencies in a requirements.txt file, copy it and install
+# COPY requirements.txt /app/
+# RUN pip3 install -r requirements.txt
+
+# Copy your application code to the container (make sure you create a .dockerignore file if any large files or directories should be excluded)
+COPY . /app/
+
+# Set the default command to execute
+CMD ["python3", "your_script.py"]
