@@ -1,5 +1,4 @@
-# Use Pipeless base image
-FROM miguelaeh/pipeless
+FROM python:3.8
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -15,9 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Upgrade pip and setuptools
 RUN python3 -m pip install --upgrade pip setuptools
 
-# Install TensorFlow
+# Install TensorFlow CPU and Opencv
 # Note: Adjust the TensorFlow version as necessary to ensure compatibility with the CUDA version.
-RUN pip3 install tensorflow==2.4
+RUN pip3 install tensorflow opencv-python opencv-python-headless
 
 # Your application's setup
 WORKDIR /app
@@ -30,4 +29,4 @@ WORKDIR /app
 COPY . /app/
 
 # Set the default command to execute
-CMD ["python3", "your_script.py"]
+CMD ["python3", "tf_lite.py"]
