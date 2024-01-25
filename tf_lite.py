@@ -32,10 +32,14 @@ input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 # inference
+import time
+start = time.time()
 interpreter.set_tensor(input_details[0]['index'], tensor)
 interpreter.invoke()
 output = interpreter.get_tensor(output_details[0]['index'])
 output = output.reshape(256, 256)
+end = time.time()
+print("Inference time", end-start)
 
 # output file
 prediction = cv2.resize(output, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_CUBIC)
@@ -45,6 +49,7 @@ depth_max = prediction.max()
 img_out = (255 * (prediction - depth_min) / (depth_max - depth_min)).astype("uint8")
 
 # Using OpenCV to display the image
-cv2.imshow("Output Image", img_out)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.imshow("Output Image", img_out)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+print(img_out)
