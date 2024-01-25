@@ -5,6 +5,7 @@
 import cv2
 import tensorflow as tf
 import urllib.request
+import time
 
 url, filename = ("https://github.com/intel-isl/MiDaS/releases/download/v2/dog.jpg", "dog.jpg")
 urllib.request.urlretrieve(url, filename)
@@ -31,15 +32,29 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
-# inference
-import time
-start = time.time()
-interpreter.set_tensor(input_details[0]['index'], tensor)
-interpreter.invoke()
-output = interpreter.get_tensor(output_details[0]['index'])
-output = output.reshape(256, 256)
-end = time.time()
-print("Inference time", end-start)
+
+# Initialize a list to store inference times
+inference_times = []
+
+# Run the inference 10 times in a loop
+for _ in range(10):
+    start = time.time()
+    interpreter.set_tensor(input_details[0]['index'], tensor)
+    interpreter.invoke()
+    output = interpreter.get_tensor(output_details[0]['index'])
+    output = output.reshape(256, 256)
+    end = time.time()
+    
+    # Calculate this run's inference time and append to the list
+    inference_times.append(end - start)
+
+# Calculate the average inference time
+average_time = sum(inference_times) / len(inference_times)
+
+# Print the average inference time
+print("Average inference time:", average_time)
+
+
 
 # output file
 prediction = cv2.resize(output, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_CUBIC)
