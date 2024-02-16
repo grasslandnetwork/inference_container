@@ -1,6 +1,6 @@
-from pipeless_ai_tf_models.tflite import TfLiteModel
+import cv2
 
 def init():
     return {
-        "model": TfLiteModel()
+        "model": cv2.CascadeClassifier('/app/cats.xml') 
     }
