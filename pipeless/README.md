@@ -26,7 +26,7 @@ docker exec -it pipeless /bin/bash
 ```
 
 ```
-pipeless add stream --input-uri "https://pipeless-public.s3.eu-west-3.amazonaws.com/cats.mp4" --output-uri "rtsp://127.0.0.1:8554/mystream" --frame-path "my-stage
+pipeless add stream --input-uri "https://pipeless-public.s3.eu-west-3.amazonaws.com/cats.mp4" --output-uri "rtsp://127.0.0.1:8554/mystream" --frame-path "my-stage"
 
 ```
 ### Then view the video output
