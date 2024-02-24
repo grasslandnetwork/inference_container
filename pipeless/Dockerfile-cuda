@@ -1,0 +1,43 @@
+# Stage 1: Build environment
+FROM miguelaeh/pipeless:latest-cuda as builder
+
+USER root
+
+# Install Git, Go (ensure the version is ≥ 1.21), and other build dependencies
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:longsleep/golang-backports && \
+    apt-get update && \
+    apt-get install -y git golang-go && \
+    rm -rf /var/lib/apt/lists/*
+
+
+WORKDIR /
+
+# Clone the repository and build mediamtx
+RUN git clone https://github.com/bluenviron/mediamtx /mediamtx && \
+    cd /mediamtx && \
+    go generate ./... && \
+    CGO_ENABLED=0 go build .
+    
+
+# Separate stages lets us compile mediamtx in one stage, copy only the necessary artifacts and leave behind everything else, including the cloned repo and build tools
+
+# Stage 2: Runtime environmetn
+FROM miguelaeh/pipeless:latest-cuda
+
+# Copy the built mediamtx binary and configuration file from the builder stage
+COPY --from=builder /mediamtx/mediamtx /usr/local/bin/mediamtx
+COPY --from=builder /mediamtx/mediamtx.yml /usr/local/etc/mediamtx.yml
+
+USER root
+
+# Set execute permissions for the binary (might be redundant as go build with -o should set this already)
+RUN chmod +x /usr/local/bin/mediamtx
+
+# set the user back to Pipeless' default user
+USER 1001
+
+
+# Reset to the Pipeless' default working directory
+WORKDIR /app
