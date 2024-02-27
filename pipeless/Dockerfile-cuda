@@ -35,6 +35,11 @@ USER root
 # Set execute permissions for the binary (might be redundant as go build with -o should set this already)
 RUN chmod +x /usr/local/bin/mediamtx
 
+# Copy new entrypoint.sh that includes command to run mediamtx in background
+COPY entrypoint.sh /scripts/entrypoint.sh
+RUN chmod +x /scripts/entrypoint.sh
+
+
 # set the user back to Pipeless' default user
 USER 1001
 
