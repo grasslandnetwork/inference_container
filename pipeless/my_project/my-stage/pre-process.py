@@ -1,16 +1,21 @@
 # make stateful
 
+import numpy as np
 import cv2
 
 def hook(frame_data, _):
-    rgb_frame_arr = frame_data['original']
+    frame = frame_data['original']
+    ih, iw = (224, 224)
+    h, w, _ = frame.shape
 
-    # Create reduced frame for faster detection
-    original_height, original_width, _ = rgb_frame_arr.shape
-    aspect_ratio = original_width / original_height
-    reduced_width = 600
-    reduced_height = int(reduced_width / aspect_ratio)
-    reduced_frame = cv2.resize(rgb_frame_arr, (reduced_width, reduced_height))
+    scale = min(iw/w, ih/h)
+    nw, nh = int(scale * w), int(scale * h)
+    image_resized = cv2.resize(frame, (nw, nh))
 
-    frame_data['modified'] = reduced_frame
-
+    image_padded = np.full(shape=[ih, iw, 3], fill_value=128.0)
+    dw, dh = (iw - nw) // 2, (ih-nh) // 2
+    image_padded[dh:nh+dh, dw:nw+dw, :] = image_resized
+    image_padded = image_padded / 255.
+    image_padded = image_padded.astype(np.float32)
+    image_padded = np.transpose(image_padded, axes=(2,0,1)) # Convert to c,h,w
+    frame_data['inference_input'] = image_padded
