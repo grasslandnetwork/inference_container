@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  grassland_inference:
+    image: miguelaeh/pipeless:latest-cuda
+    environment:
+      - PIPELESS_USER_PYTHON_PACKAGES=opencv-python,numpy
+    volumes:
+      - /tmp/venv:/.venv
+      - ./my_project:/app
+    command: start --stages-dir .
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: ["gpu"]
+            driver: nvidia
+            count: all # Allocates all available GPUs
+
+    network_mode: host
+    
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    network_mode: host
+    stdin_open: true # Imitates '-it', allows keeping the stdin open
+    tty: true # Allocates a pseudo-TTY, imitating '-it'
+    depends_on:
+      - grassland_inference
+
