@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  grassland_inference: # This file overrides the following fields in docker-compose.yml
+    build:
+      context: .
+      dockerfile: Dockerfile-cuda
+    image: grasslandnetwork/inference_container-cuda:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: ["gpu"]
+            driver: nvidia
+            count: all # Allocates all available GPUs

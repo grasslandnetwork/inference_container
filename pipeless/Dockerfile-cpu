@@ -1,5 +1,5 @@
 # Stage 1: Build environment
-FROM miguelaeh/pipeless:latest-cuda as builder
+FROM miguelaeh/pipeless:latest
 
 # Ensure user is set to Pipeless' default user
 USER 1001

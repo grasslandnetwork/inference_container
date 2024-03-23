@@ -2,21 +2,13 @@ version: '3.8'
 
 services:
   grassland_inference:
-    image: miguelaeh/pipeless:latest-cuda
+    build:
+      context: .
+      dockerfile: Dockerfile-cpu
+    image: grasslandnetwork/inference_container-cpu:latest
     environment:
       - PIPELESS_USER_PYTHON_PACKAGES=opencv-python,numpy
-    volumes:
-      - /tmp/venv:/.venv
-      - ./my_project:/app
     command: start --stages-dir .
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - capabilities: ["gpu"]
-            driver: nvidia
-            count: all # Allocates all available GPUs
-
     network_mode: host
     
   mediamtx:

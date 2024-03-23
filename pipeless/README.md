@@ -1,19 +1,13 @@
 # Pipeless Example Commands
 
+## Run Docker Container
+
 ### Terminal 1: 
+From inside the pipeless directory
 
 ```
-mkdir /tmp/venv
-sudo chown 1001 /tmp/venv # Give the proper permissions for the non-root image
+docker compose up
 ```
-
-Then from inside the my-project directory
-
-```
-docker run --rm --gpus all --network=host -v "/tmp/venv:/.venv" -v $(pwd):/app -e "PIPELESS_USER_PYTHON_PACKAGES=opencv-python,numpy" --name pipeless grasslandnetwork/inference_container:pipeless-0.5 start --stages-dir .
-```
-
-The mounted volume must have rwx permissions for the root group. In Linux, the root group is just like any other group and by default new users belong to it. Since the Pipeless container is non-root it uses the user 1001, thus, the required permissions allow it to created content in the mounted volume.
 
 ### Terminal 2: 
 
@@ -27,3 +21,23 @@ pipeless add stream --input-uri "https://pipeless-public.s3.eu-west-3.amazonaws.
 ```
 ### Then view the video output
 Either at http://localhost:8889/mystream/ or rtsp://localhost:8554/mystream
+
+
+### To stop the containers
+```
+Ctrl-c
+```
+
+To remove stopped containers
+```
+docker compose down
+```
+
+
+## Build Docker Image
+
+From inside the pipeless directory
+
+```
+docker build -f Dockerfile-cpu -t grasslandnetwork/inference_container-cpu:latest .
+```
