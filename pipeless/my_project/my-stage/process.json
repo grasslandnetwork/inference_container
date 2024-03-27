@@ -1,7 +1,7 @@
 {
     "make_stateful": true,
     "runtime": "onnx",
-    "model_uri": "https://pipeless-public.s3.eu-west-3.amazonaws.com/yolov8n.onnx",
+    "model_uri": "https://github.com/fabio-sim/Depth-Anything-ONNX/releases/download/v1.0.0/depth_anything_vits14.onnx",
     "inference_params": {
         "execution_provider": "cpu"
     }
